@@ -11,7 +11,7 @@ analyze the effects of theta to prediction
 
 
 def calc_error(qcl: StandardQCLRegressor, tr_X, tr_y):
-    pred_y = qcl.predict(tr_X)
+    pred_y = QCLRegressor.predict(tr_X)
     err = mean_squared_error(pred_y, tr_y)
     return err
 
