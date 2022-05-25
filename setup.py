@@ -12,7 +12,7 @@ setup(name='QCLRegressor',
       # packages=find_packages(),
       packages=[
           "QCLRegressor.Encoders",
-      ]
+      ],
 
       package_dir={"QCLRegressor.Encoders": "regressions/qcl/Encoders",
                    # "": "regressions/qcl/gates",
