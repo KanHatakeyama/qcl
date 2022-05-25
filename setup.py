@@ -9,5 +9,7 @@ setup(name='QCLRegressor',
       long_description="README",
       author='Kan Hatakeyama',
       license="MIT",
-      packages=find_packages(),
+      # packages=find_packages(),
+      packages=["Encoders", "gates", "Qiskit",
+                "regressors", "testing", "utils"],
       )
