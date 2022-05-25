@@ -15,13 +15,43 @@ standard QCL regressor
 class StandardQCLRegressor:
     def __init__(self, n_qubit: int,
                  x_dim: int,
-                 encoder=None,
+                 encoder: StandardEncoder = None,
+                 vqe_gates: CNOTRotationGates = None,
                  solver=basinhopping_solver_verbose,
-                 observable=None,
-                 vqe_gates=None,
+                 observable: ZObservable = None,
                  sigmoid_x=False,
                  logit_y_threshold=None,
                  ):
+        """
+        Standard QCL class for regression
+
+        Attributes
+        ----------
+        n_qubit: int
+            Number of qubit for calculation
+
+        x_dim: int
+            Dimension of X
+
+        encoder: Encoder class
+            Encoding way of X
+
+        vqe_gates: entangling class
+            Define parametric circuit to learn
+
+        solver: func
+            Solver functions for fitting
+
+        observable: ZObservable
+            Observable class to calculate final y
+
+        sigmoid_x: Bool
+            If true, X is preprocessed with a sigmoid function
+
+        logit_y_threshold: float
+            If some number is set, prediction is converted by logit. The prediction is capped with the threshold
+
+        """
         self.n_qubit = n_qubit
         self.x_dim = x_dim
         self.solver = solver
@@ -52,12 +82,20 @@ class StandardQCLRegressor:
         return state
 
     def _predict(self, x: List[float]) -> float:
+        # preprocess
         if self.sigmoid_x:
             x = 1/(1+np.exp(-np.array(x)))
+
+        # encode
         state = self.encoder(x)
+
+        # entangle
         state = self._calc_entangled_states(state)
+
+        # calc y
         y = self.observable(state)
 
+        # postprocess
         if self.logit_y_threshold:
             # avoid nan
             v = abs(self.logit_y_threshold)
@@ -88,7 +126,9 @@ class StandardQCLRegressor:
             loss = ((y_pred - tr_y)**2).mean()
             return loss
 
+        # fitting by scipy solver
         result = self.solver(cost_func, self.vqe_gates.get_params())
 
+        # set trained parameters
         self.vqe_gates.set_params(result.x)
         return self
