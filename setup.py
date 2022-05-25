@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys
 
-sys.path.append('./regressions/qcl')
+sys.path.append('./qcl')
 
 setup(name='QCLRegressor',
       version='2022.5.25',
