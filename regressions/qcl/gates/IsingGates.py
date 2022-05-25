@@ -45,21 +45,16 @@ class IsingGates(CNOTRotationGates):
 
 
 def make_fullgate(list_SiteAndOperator, n_qubit):
-    '''
-    list_SiteAndOperator = [ [i_0, O_0], [i_1, O_1], ...] を受け取り,
-    関係ないqubitにIdentityを挿入して
-    I(0) * ... * O_0(i_0) * ... * O_1(i_1) ...
-    という(2**nqubit, 2**nqubit)行列をつくる.
-    '''
+
     list_Site = [SiteAndOperator[0]
                  for SiteAndOperator in list_SiteAndOperator]
-    list_SingleGates = []  # 1-qubit gateを並べてxp.kronでreduceする
+    list_SingleGates = []
     cnt = 0
     for i in range(n_qubit):
         if (i in list_Site):
             list_SingleGates.append(list_SiteAndOperator[cnt][1])
             cnt += 1
-        else:  # 何もないsiteはidentity
+        else:
             list_SingleGates.append(I_mat)
 
     return reduce(xp.kron, list_SingleGates)
@@ -67,24 +62,20 @@ def make_fullgate(list_SiteAndOperator, n_qubit):
 
 def prepare_time_evol_gate(n_qubit, time_step):
 
-    # ランダム磁場・ランダム結合イジングハミルトニアンをつくって時間発展演算子をつくる
     ham = xp.zeros((2**n_qubit, 2**n_qubit), dtype=complex)
-    for i in range(n_qubit):  # i runs 0 to nqubit-1
-        Jx = -1. + 2.*xp.random.rand()  # -1~1の乱数
+    for i in range(n_qubit):
+        Jx = -1. + 2.*xp.random.rand()
         ham += Jx * make_fullgate([[i, X_mat]], n_qubit)
         for j in range(i+1, n_qubit):
             J_ij = -1. + 2.*xp.random.rand()
             ham += J_ij * \
                 make_fullgate([[i, Z_mat], [j, Z_mat]], n_qubit)
 
-    # 対角化して時間発展演算子をつくる. H*P = P*D <-> H = P*D*P^dagger
-    # ham=xp.array(ham)
     diag, eigen_vecs = xp.linalg.eigh(ham)
     time_evol_op = xp.dot(xp.dot(eigen_vecs, xp.diag(
         xp.exp(-1j*time_step*diag))), eigen_vecs.T.conj())  # e^-iHT
 
     time_evol_op = np.array(xp.asnumpy(time_evol_op))
-    # qulacsのゲートに変換しておく
     time_evol_gate = DenseMatrix(
         [i for i in range(n_qubit)], time_evol_op)
 
