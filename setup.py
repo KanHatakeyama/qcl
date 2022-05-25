@@ -10,6 +10,6 @@ setup(name='QCLRegressor',
       author='Kan Hatakeyama',
       license="MIT",
       # packages=find_packages(),
-      packages=["/regressions/qcl/Encoders", "gates", "Qiskit",
+      packages=["regressions/qcl/Encoders", "gates", "Qiskit",
                 "regressors", "testing", "utils"],
       )
