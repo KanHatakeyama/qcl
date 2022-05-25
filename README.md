@@ -3,6 +3,22 @@
 # About
 - Source codes and classes to conduct QCL for regression tasks
 
+# How to use
+- Install
+  - [Qulacs](https://github.com/qulacs/qulacs) is a main backend for this library
+```
+pip3 install git+https://github.com/KanHatakeyama/QCL.git
+
+```
+
+- Fit and predict
+```
+from QCLRegressor.regressors.StandardQCLRegressor import StandardQCLRegressor
+model=StandardQCLRegressor(n_qubit=NUMBER_OF_QUBITS,x_dim=DIMENSION_OF_X)
+model.fit(X,y)
+model.predict(X)
+
+```
 # Quick links
 - Start
   1. [Simple regression for 1d data](QCLRegressor.ipynb)
@@ -22,18 +38,23 @@
 - [QCL paper by Mitarai et al (Phys. Rev. A 2018)](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.98.032309)
 - [Quantum Native Dojo](https://dojo.qulacs.org/)
 
-# Main modules
+# Main requiremetns
+  - qulacs is at least needed
+  - test tested at ...
 ```
+qulacs==0.3.0
 python==3.9.12
 sympy==1.10.1
 scipy==1.8.0
-qulacs==0.3.0
 qulacsvis==0.2.2
 qiskit==0.36.1
 scikit-learn==1.0.2
 keras==2.9.0
 tensorflow==2.9.0
 ```
+
+# Versions
+- 2022/5/25: First version
 
 # Author
 - Kan Hatakeyama-Sato
