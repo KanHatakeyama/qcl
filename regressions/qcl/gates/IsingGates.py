@@ -76,10 +76,8 @@ def prepare_time_evol_gate(n_qubit, time_step):
         xp.exp(-1j*time_step*diag))), eigen_vecs.T.conj())  # e^-iHT
 
     # in case of cupy
-    try:
+    if type(np) is not type(xp):
         time_evol_op = np.array(xp.asnumpy(time_evol_op))
-    except:
-        pass
 
     time_evol_gate = DenseMatrix(
         [i for i in range(n_qubit)], time_evol_op)
