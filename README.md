@@ -31,8 +31,10 @@ model.predict(X)
       4. [Regression by actual IBM quantum machines](regressions/1D_Qiskit.ipynb)
     - Chemical dataset
         - [Predicting chemical properties](regressions/Chem_calc.ipynb)
+          - [Original dataset1](https://github.com/GLambard/Molecules_Dataset_Collection)
+          - [Original dataset2](https://figshare.com/articles/dataset/Jean_Claude_Bradley_Open_Melting_Point_Datset/1031637)
 # Cite
-- Manuscript in preparation
+- [Preprint](https://chemrxiv.org/engage/chemrxiv/article-details/62941eeb24011e7db10f573d)
 
 # Related info 
 - [QCL paper by Mitarai et al (Phys. Rev. A 2018)](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.98.032309)
