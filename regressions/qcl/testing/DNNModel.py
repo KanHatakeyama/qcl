@@ -1,6 +1,8 @@
+from pickletools import optimize
 from keras.layers.core import Dense, Activation
 from keras.models import Sequential
 from keras.models import Model
+from keras.optimizers import Adam
 
 """
 MLP class with Keras backend
@@ -15,7 +17,8 @@ def prepare_dnn_model(activation="tanh", hidden_dim=16, layers=2):
     dnn.add(Dense(1))
 
     dnn.compile(loss='mse',
-                optimizer="adam",
+                # optimizer="adam",
+                optimizer=Adam(lr=0.01, beta_1=0.9, beta_2=0.999),
                 metrics=['mse'])
 
     return dnn
