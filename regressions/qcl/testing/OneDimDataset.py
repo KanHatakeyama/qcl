@@ -11,18 +11,18 @@ utility functions to make one-dimensional datasets
 """
 
 x_dim = 1
-extra_high_ratio = 0.1
-extra_low_ratio = 0.1
-inner_test_ratio = 0.2
 vmax = 1
 test_color = "#377eb8"
 train_color = "Orange"
 size = 10
 
 
-def prepare_dataset(n_all_record=10, mode="sin", plot=True):
+def prepare_dataset(n_all_record=10, mode="sin", plot=True,
+extra_high_ratio=0.1,
+extra_low_ratio=0.1,
+inner_test_ratio=0.2):
     low_threshold_id = int(n_all_record*extra_low_ratio)
-    high_threshold_id = int(n_all_record*(1-extra_low_ratio))
+    high_threshold_id = int(n_all_record*(1-extra_high_ratio))
 
     X_array = np.random.random((n_all_record, x_dim))
     X_array = np.sort(X_array, axis=0)
@@ -41,6 +41,8 @@ def prepare_dataset(n_all_record=10, mode="sin", plot=True):
 
     inner_X = X[low_threshold_id:high_threshold_id]
     inner_y = y[low_threshold_id:high_threshold_id].reshape(-1)
+
+    #print(low_threshold_id,high_threshold_id,extra_low_ratio,extra_high_ratio)
 
     tr_X, te_inner_X, tr_y, te_inner_y = train_test_split(
         inner_X, inner_y, train_size=1-extra_high_ratio-extra_low_ratio-inner_test_ratio)
@@ -69,8 +71,13 @@ def eval(ax, model, tr_X, tr_y, te_inner_X, te_inner_y, te_low_X, te_low_y, te_h
         # plt.figure(figsize=(2,2),dpi=150)
         ax.set_title(title)
         ax.plot(act_X, act_y, label="Answer", c="gray", linewidth=1, alpha=0.5)
-    for (X, y), label in zip([(tr_X, tr_y), (te_inner_X, te_inner_y), (te_low_X, te_low_y), (te_high_X, te_high_y)],
-                             ("Train", "Test", "", "")):
+    for (X, y), label in zip([ 
+                              (te_inner_X, te_inner_y),
+                            (tr_X, tr_y),
+                              (te_low_X, te_low_y),
+                              (te_high_X, te_high_y)
+                              ],
+                             ("Test", "Train", "", "")):
 
         y_pred = model.predict(X)
         y_pred[np.where(y_pred != y_pred)] = 0
